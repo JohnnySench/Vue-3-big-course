@@ -1,4 +1,5 @@
 <script>
+
 export default {
   name: 'PostForm',
   data() {
@@ -6,7 +7,7 @@ export default {
       post: {
         title: '',
         body: ''
-      }
+      },
     }
   },
   methods: {
@@ -14,6 +15,7 @@ export default {
       if (this.post.body && this.post.title) {
         this.post.id = Date.now()
         this.$emit('create', this.post)
+        console.log(this.post.body)
       }
       this.post = {
         title: '',
@@ -28,42 +30,20 @@ export default {
 <template>
   <form ref="form" class="form-post">
     <h4>Создание поста</h4>
-    <input
+    <MyInput
         v-model="post.title"
-        class="input"
-        type="text"
         placeholder="Название поста"/>
-    <input
+    <MyInput
         v-model="post.body"
-        class="input"
-        type="text"
         placeholder="Описание поста"/>
-    <button
-        @click="create"
-        type="button"
-        class="btn-create">Создать пост
-    </button>
+    <MyButton @click="create">Создать пост</MyButton>
   </form>
 </template>
 
 <style scoped>
-.input {
-  margin-top: 15px;
-  padding: 10px 15px;
-  border: 1px solid teal;
-  width: 100%;
-}
-
-
 .form-post {
   display: flex;
   flex-direction: column;
 }
 
-.btn-create {
-  margin-top: 15px;
-  align-self: flex-end;
-  border: 1px solid teal;
-  padding: 10px 15px;
-}
 </style>

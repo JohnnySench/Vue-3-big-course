@@ -1,11 +1,13 @@
 <script>
 import PostForm from "./components/PostForm.vue";
 import PostList from "./components/PostList.vue";
+import MyButton from "./components/UI/MyButton.vue";
 
 export default {
   name: 'App',
-  components: {PostList, PostForm},
+  components: {MyButton, PostList, PostForm},
   data: () => ({
+    dialogVisible: false,
     posts: [
       {
         id: 1,
@@ -33,6 +35,12 @@ export default {
         body: data.body
       }
       this.posts.push(payload)
+    },
+    removePost(post) {
+      this.posts = this.posts.filter(x => x.id !== post.id)
+    },
+    openDialog() {
+      this.dialogVisible = true;
     }
   }
 }
@@ -40,8 +48,12 @@ export default {
 
 <template>
   <div class="container">
-    <PostForm @create="createPost"/>
-    <PostList :posts="posts"/>
+    <h1>Страница с постами</h1>
+    <my-button @click="openDialog">Создать пост</my-button>
+    <MyDialog v-model:local-visible="dialogVisible">
+      <PostForm @create="createPost"/>
+    </MyDialog>
+    <PostList @remove="removePost" :posts="posts"/>
 
   </div>
 </template>

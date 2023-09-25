@@ -17,7 +17,11 @@ export default {
 <template>
   <div>
     <h3>Список пользователей</h3>
-    <PostItem v-for="post in posts" :post="post"/>
+    <PostItem
+        @remove="this.$emit('remove', post)"
+        v-for="post in posts"
+        :post="post"
+        :key="post.id"/>
   </div>
 </template>
 

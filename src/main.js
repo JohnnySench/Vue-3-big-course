@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from "./router/router.js";
 import store from "./store/store.js";
+import component from './components/UI'
 
 // Vuetify
 import 'vuetify/styles'
@@ -20,4 +21,11 @@ const vuetify = createVuetify({
     directives,
 })
 
-createApp(App).use(vuetify, {iconfont: 'mdi'}).use(router).use(VueAxios, axios).use(store).mount('#app')
+const app = createApp(App)
+
+// Глобальная регистрация компонентов UI
+component.forEach(component => {
+    app.component(component.name, component)
+})
+
+app.use(vuetify, {iconfont: 'mdi'}).use(router).use(VueAxios, axios).use(store).mount('#app')

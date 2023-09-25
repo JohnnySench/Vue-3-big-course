@@ -1,10 +1,16 @@
 <script>
+
 export default {
   name: "PostItem",
   props: {
     post: {
       type: Object,
       required: true
+    }
+  },
+  methods: {
+    removePost(post) {
+      this.$emit('remove', post)
     }
   }
 }
@@ -16,8 +22,10 @@ export default {
       <div><strong>Название: </strong>{{ post.title }}</div>
       <div><strong>Описание: </strong>{{ post.body }}</div>
     </div>
-    <div class="post__btns">
-      <button class="btn-delete" type="button">Удалить пост</button>
+    <div class="post__btn">
+      <MyButton @click="removePost(post)">
+        Удалить
+      </MyButton>
     </div>
   </div>
 </template>
@@ -32,8 +40,4 @@ export default {
   justify-content: space-between;
 }
 
-.btn-delete {
-  border: 1px solid teal;
-  padding: 10px 15px;
-}
 </style>
