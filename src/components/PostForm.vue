@@ -15,7 +15,6 @@ export default {
       if (this.post.body && this.post.title) {
         this.post.id = Date.now()
         this.$emit('create', this.post)
-        console.log(this.post.body)
       }
       this.post = {
         title: '',

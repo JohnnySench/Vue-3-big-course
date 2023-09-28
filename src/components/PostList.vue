@@ -16,7 +16,8 @@ export default {
 
 <template>
   <div>
-    <h3>Список пользователей</h3>
+    <h3 v-if="posts.length > 0">Список постов</h3>
+    <h3 class="text-red" v-else>Список постов пуст</h3>
     <PostItem
         @remove="this.$emit('remove', post)"
         v-for="post in posts"

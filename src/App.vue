@@ -2,46 +2,54 @@
 import PostForm from "./components/PostForm.vue";
 import PostList from "./components/PostList.vue";
 import MyButton from "./components/UI/MyButton.vue";
+import axios from "axios";
+import MySelect from "./components/UI/MySelect.vue";
 
 export default {
   name: 'App',
-  components: {MyButton, PostList, PostForm},
+  components: {MySelect, MyButton, PostList, PostForm},
   data: () => ({
     dialogVisible: false,
-    posts: [
-      {
-        id: 1,
-        title: 'JavaScript',
-        body: 'Описание поста 1'
-      },
-      {
-        id: 2,
-        title: 'TypeScript',
-        body: 'Описание поста 2'
-      },
-      {
-        id: 3,
-        title: 'Vue js',
-        body: 'Описание поста 3'
-      },
-    ],
+    posts: [],
+    isPostLoading: false,
+    selectedSort: '',
+    sortOptions: [
+      {name: 'По названию', value: 'title'},
+      {name: 'По описанию', value: 'body'}
+    ]
   }),
   methods: {
     createPost(data) {
-      console.log(data)
       const payload = {
         id: data.id,
         title: data.title,
         body: data.body
       }
       this.posts.push(payload)
+      this.dialogVisible = false;
     },
     removePost(post) {
       this.posts = this.posts.filter(x => x.id !== post.id)
     },
     openDialog() {
       this.dialogVisible = true;
+    },
+    async getPosts() {
+      try {
+        this.isPostLoading = true;
+        setTimeout(async () => {
+          const posts = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
+          this.posts = posts.data;
+          this.isPostLoading = false
+        }, 1000)
+      } catch (e) {
+        console.log(e)
+      }
+
     }
+  },
+  mounted() {
+    this.getPosts()
   }
 }
 </script>
@@ -49,12 +57,19 @@ export default {
 <template>
   <div class="container">
     <h1>Страница с постами</h1>
-    <my-button @click="openDialog">Создать пост</my-button>
+    <div class="app__btns">
+      <my-button @click="openDialog">Создать пост</my-button>
+      <my-select :options="sortOptions" v-model="selectedSort"/>
+    </div>
     <MyDialog v-model:local-visible="dialogVisible">
       <PostForm @create="createPost"/>
     </MyDialog>
-    <PostList @remove="removePost" :posts="posts"/>
-
+    <PostList
+        v-if="!isPostLoading"
+        @remove="removePost"
+        :posts="posts"
+    />
+    <div v-else>Идёт загрузка.........</div>
   </div>
 </template>
 
@@ -67,6 +82,10 @@ export default {
 
 .container {
   padding: 20px;
+}
+.app__btns {
+  display: flex;
+  justify-content: space-between;
 }
 
 
