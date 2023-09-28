@@ -18,6 +18,11 @@ export default {
       {name: 'По описанию', value: 'body'}
     ]
   }),
+  computed: {
+    getSortedOptions() {
+      return [...this.posts].sort((a, b) => a[this.selectedSort]?.localeCompare(b[this.selectedSort]))
+    }
+  },
   methods: {
     createPost(data) {
       const payload = {
@@ -67,7 +72,7 @@ export default {
     <PostList
         v-if="!isPostLoading"
         @remove="removePost"
-        :posts="posts"
+        :posts="getSortedOptions"
     />
     <div v-else>Идёт загрузка.........</div>
   </div>
