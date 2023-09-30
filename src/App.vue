@@ -1,17 +1,16 @@
 <script>
 import PostForm from "./components/PostForm.vue";
 import PostList from "./components/PostList.vue";
-import MyButton from "./components/UI/MyButton.vue";
 import axios from "axios";
-import MySelect from "./components/UI/MySelect.vue";
 
 export default {
   name: 'App',
-  components: {MySelect, MyButton, PostList, PostForm},
+  components: {PostList, PostForm},
   data: () => ({
     dialogVisible: false,
     posts: [],
     isPostLoading: false,
+    searchQuery: '',
     selectedSort: '',
     sortOptions: [
       {name: 'По названию', value: 'title'},
@@ -19,9 +18,13 @@ export default {
     ]
   }),
   computed: {
-    getSortedOptions() {
+    getPostsBySortedOptions() {
       return [...this.posts].sort((a, b) => a[this.selectedSort]?.localeCompare(b[this.selectedSort]))
+    },
+    getPostsBySearchQuery() {
+      return this.getPostsBySortedOptions.filter(x => x.title.toLowerCase().includes(this.searchQuery.toLowerCase()))
     }
+
   },
   methods: {
     createPost(data) {
@@ -62,6 +65,7 @@ export default {
 <template>
   <div class="container">
     <h1>Страница с постами</h1>
+    <MyInput v-model="searchQuery"/>
     <div class="app__btns">
       <my-button @click="openDialog">Создать пост</my-button>
       <my-select :options="sortOptions" v-model="selectedSort"/>
@@ -72,7 +76,7 @@ export default {
     <PostList
         v-if="!isPostLoading"
         @remove="removePost"
-        :posts="getSortedOptions"
+        :posts="getPostsBySearchQuery"
     />
     <div v-else>Идёт загрузка.........</div>
   </div>
