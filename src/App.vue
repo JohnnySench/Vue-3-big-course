@@ -29,6 +29,11 @@ export default {
     }
 
   },
+  watch: {
+    page() {
+      this.getPosts()
+    }
+  },
   methods: {
     createPost(data) {
       const payload = {
@@ -63,8 +68,7 @@ export default {
       } catch (e) {
         console.log(e)
       }
-
-    }
+    },
   },
   mounted() {
     this.getPosts()

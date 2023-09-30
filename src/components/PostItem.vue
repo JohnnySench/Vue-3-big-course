@@ -19,6 +19,7 @@ export default {
 <template>
   <div class="post">
     <div>
+      {{post.id}}
       <div><strong>Название: </strong>{{ post.title }}</div>
       <div><strong>Описание: </strong>{{ post.body }}</div>
     </div>
