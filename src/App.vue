@@ -11,6 +11,9 @@ export default {
     posts: [],
     isPostLoading: false,
     searchQuery: '',
+    page: 1,
+    limit: 10,
+    totalPages: null,
     selectedSort: '',
     sortOptions: [
       {name: 'По названию', value: 'title'},
@@ -46,7 +49,14 @@ export default {
       try {
         this.isPostLoading = true;
         setTimeout(async () => {
-          const posts = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
+          const posts = await axios.get('https://jsonplaceholder.typicode.com/posts', {
+            params: {
+              _page: this.page,
+              _limit: this.limit
+            }
+          });
+          this.totalPages = Math.ceil(posts.headers['x-total-count'] / this.limit)
+          this.t
           this.posts = posts.data;
           this.isPostLoading = false
         }, 1000)
@@ -68,7 +78,9 @@ export default {
     <MyInput v-model="searchQuery"/>
     <div class="app__btns">
       <my-button @click="openDialog">Создать пост</my-button>
-      <my-select :options="sortOptions" v-model="selectedSort"/>
+      <my-select
+          :options="sortOptions"
+          v-model="selectedSort"/>
     </div>
     <MyDialog v-model:local-visible="dialogVisible">
       <PostForm @create="createPost"/>
@@ -79,6 +91,9 @@ export default {
         :posts="getPostsBySearchQuery"
     />
     <div v-else>Идёт загрузка.........</div>
+    <MyPagination
+        v-model:current-page="page"
+        :total-pages="this.totalPages"/>
   </div>
 </template>
 
@@ -92,6 +107,7 @@ export default {
 .container {
   padding: 20px;
 }
+
 .app__btns {
   display: flex;
   justify-content: space-between;

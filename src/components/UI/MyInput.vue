@@ -19,7 +19,9 @@ export default {
       :value="modelValue"
       @input="sendData"
       class="input"
-      type="text"/>
+      type="text"
+      placeholder="Поиск..."
+  />
 </template>
 
 <style scoped>
