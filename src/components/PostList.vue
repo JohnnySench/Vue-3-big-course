@@ -36,12 +36,15 @@ export default {
 
 .user-list-enter-active,
 .user-list-leave-active {
-  transition: all 1s ease;
+  transition: all .4s ease;
 }
 
 .user-list-enter-from,
 .user-list-leave-to {
   opacity: 0;
-  transform: translateY(30px);
+  transform: translateX(130px);
+}
+.user-list-move {
+  transition: transform 0.8s ease;
 }
 </style>
