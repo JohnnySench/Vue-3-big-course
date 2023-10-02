@@ -48,26 +48,52 @@ export default {
     async getPosts() {
       try {
         this.isPostLoading = true;
-        setTimeout(async () => {
-          const posts = await axios.get('https://jsonplaceholder.typicode.com/posts', {
-            params: {
-              _page: this.page,
-              _limit: this.limit
-            }
-          });
-          this.totalPages = Math.ceil(posts.headers['x-total-count'] / this.limit)
-          this.t
-          this.posts = posts.data;
-          this.isPostLoading = false
-        }, 1000)
+        const posts = await axios.get('https://jsonplaceholder.typicode.com/posts', {
+          params: {
+            _page: this.page,
+            _limit: this.limit
+          }
+        });
+        this.totalPages = Math.ceil(posts.headers['x-total-count'] / this.limit)
+        this.t
+        this.posts = posts.data;
+      } catch (e) {
+        alert(e)
+      } finally {
+        this.isPostLoading = false
+      }
+    },
+    async loadMorePosts() {
+      try {
+        this.page += 1;
+        const posts = await axios.get('https://jsonplaceholder.typicode.com/posts', {
+          params: {
+            _page: this.page,
+            _limit: this.limit
+          }
+        });
+        this.totalPages = Math.ceil(posts.headers['x-total-count'] / this.limit)
+        this.t
+        this.posts = [...this.posts, ...posts.data]
       } catch (e) {
         console.log(e)
       }
-
     }
   },
   mounted() {
     this.getPosts()
+    let options = {
+      rootMargin: "0px",
+      threshold: 1.0,
+    };
+    let callback = (entries, callback) => {
+      if (entries[0].isIntersecting && this.page < this.totalPages) {
+        this.loadMorePosts()
+      }
+    }
+
+    let observer = new IntersectionObserver(callback, options);
+    observer.observe(this.$refs.observer)
   }
 }
 </script>
@@ -91,9 +117,7 @@ export default {
         :posts="getPostsBySearchQuery"
     />
     <div v-else>Идёт загрузка.........</div>
-    <MyPagination
-        v-model:current-page="page"
-        :total-pages="this.totalPages"/>
+    <div ref="observer" class="observer"></div>
   </div>
 </template>
 
@@ -113,5 +137,9 @@ export default {
   justify-content: space-between;
 }
 
+.observer {
+  height: 30px;
+  background-color: teal;
+}
 
 </style>
