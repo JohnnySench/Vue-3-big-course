@@ -11,6 +11,9 @@ export default {
   methods: {
     removePost(post) {
       this.$emit('remove', post)
+    },
+    openPost(post) {
+      this.$router.push(`/posts/${post.id}`)
     }
   }
 }
@@ -23,6 +26,9 @@ export default {
       <div><strong>Описание: </strong>{{ post.body }}</div>
     </div>
     <div class="post__btn">
+      <MyButton style="margin-right: 15px" @click="openPost(post)">
+        Открыть
+      </MyButton>
       <MyButton @click="removePost(post)">
         Удалить
       </MyButton>
@@ -38,6 +44,9 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+.post__btn {
+  display: flex;
 }
 
 </style>
