@@ -30,6 +30,7 @@ export default {
   <form ref="form" class="form-post">
     <h4>Создание поста</h4>
     <MyInput
+        v-focus
         v-model="post.title"
         placeholder="Название поста"/>
     <MyInput

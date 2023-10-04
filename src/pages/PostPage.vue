@@ -82,18 +82,7 @@ export default {
   },
   mounted() {
     this.getPosts()
-    let options = {
-      rootMargin: "0px",
-      threshold: 1.0,
-    };
-    let callback = (entries, callback) => {
-      if (entries[0].isIntersecting && this.page < this.totalPages) {
-        this.loadMorePosts()
-      }
-    }
 
-    let observer = new IntersectionObserver(callback, options);
-    observer.observe(this.$refs.observer)
   }
 }
 </script>
@@ -101,7 +90,7 @@ export default {
 <template>
   <div>
     <h1>Страница с постами</h1>
-    <MyInput v-model="searchQuery"/>
+    <MyInput v-focus v-model="searchQuery"/>
     <div class="app__btns">
       <my-button @click="openDialog">Создать пост</my-button>
       <my-select
@@ -117,7 +106,7 @@ export default {
         :posts="getPostsBySearchQuery"
     />
     <div v-else>Идёт загрузка.........</div>
-    <div ref="observer" class="observer"></div>
+    <div v-intersection="loadMorePosts" class="observer"></div>
   </div>
 </template>
 
