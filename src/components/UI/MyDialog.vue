@@ -1,17 +1,9 @@
 <script>
+import toggleMixin from "../../mixins/toggleMixin.js";
+
 export default {
   name: "MyDialog",
-  props: {
-    localVisible: {
-      type: Boolean,
-      default: false
-    }
-  },
-  methods: {
-    hideDialog() {
-      this.$emit('update:localVisible', false)
-    }
-  }
+  mixins: [toggleMixin]
 }
 </script>
 
