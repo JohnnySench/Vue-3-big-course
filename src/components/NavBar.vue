@@ -14,6 +14,9 @@ export default {
       <my-button @click="this.$router.push('/about')" style="margin-left: 20px">
         О сайте
       </my-button>
+      <my-button @click="this.$router.push('/store')" style="margin-left: 20px">
+        Store
+      </my-button>
     </div>
   </div>
 </template>
